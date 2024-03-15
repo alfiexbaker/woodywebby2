@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Spring 2024 Menu",
+    "path": "/menu/spring.pdf"
+  },
+  {
+    "name": "Pizza Menu",
+    "path": "/menu/pizza.pdf"
+  },
+  {
+    "name": "Breakfast Menu",
+    "path": "/menu/breakfast.pdf"
+  },
+  {
+    "name": "Oatcake Menu",
+    "path": "/menu/oatcake.pdf"
+  }
+]
