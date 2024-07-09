@@ -6,9 +6,11 @@ const Contact = () => {
     const [formData, setFormData] = useState({
         from_name: '',
         from_email: '',
-        enquiry_type: 'business', // Assuming 'business' as the default value
+        enquiry_type: 'business',
         message: '',
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submissionStatus, setSubmissionStatus] = useState('');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -20,6 +22,8 @@ const Contact = () => {
 
     const sendEmail = (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
+        setSubmissionStatus('');
 
         emailjs.send(
             process.env.REACT_APP_EMAILJS_SERVICE_ID,
@@ -29,15 +33,19 @@ const Contact = () => {
         )
             .then((result) => {
                 console.log('Email successfully sent!', result.text);
-                // Clear the form after successful submission
                 setFormData({
                     from_name: '',
                     from_email: '',
                     enquiry_type: 'business',
                     message: '',
                 });
+                setSubmissionStatus('Success! Your message has been sent.');
             }, (error) => {
                 console.log('Failed to send email:', error.text);
+                setSubmissionStatus('Failed to send message. Please try again.');
+            })
+            .finally(() => {
+                setIsSubmitting(false);
             });
     };
 
@@ -80,19 +88,21 @@ const Contact = () => {
                             value={formData.message}
                             onChange={handleChange}
                         ></textarea>
-                        <button type="submit">Submit</button>
+                        <button type="submit" disabled={isSubmitting}>
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
+                        </button>
+                        {submissionStatus && <p className="submission-status">{submissionStatus}</p>}
                     </form>
                 </div>
                 <div className="map-and-details">
-                    {/* Google Maps Embed */}
                     <div style={{ width: '100%' }}>
                         <iframe
                             width="100%"
                             height="300"
-                            frameborder="0"
+                            frameBorder="0"
                             scrolling="no"
-                            marginheight="0"
-                            marginwidth="0"
+                            marginHeight="0"
+                            marginWidth="0"
                             src="https://maps.google.com/maps?width=100%25&amp;height=300&amp;hl=en&amp;q=1%20Castleton%20Rd,%20Hope,%20Hope%20Valley%20S33%206SB+(The%20Woodroffe%20Arms)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
                         </iframe>
                     </div>
