@@ -1,3 +1,4 @@
+// menu.js
 import React, { useState, useEffect } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import './Menu.css';
@@ -6,13 +7,15 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 
 const Menu = () => {
     const [menuItems, setMenuItems] = useState([]);
+    const [numPages, setNumPages] = useState([]);
 
     useEffect(() => {
         // Fetch the menu data when the component mounts
         fetch('/menu.json')
             .then(response => response.json())
             .then(data => {
-                setMenuItems(data);
+                setMenuItems(data.map(item => ({ ...item, open: false })));
+                setNumPages(new Array(data.length).fill(0));
             })
             .catch(error => {
                 console.error("Error fetching the menu JSON:", error);
@@ -26,6 +29,14 @@ const Menu = () => {
             }
             return item;
         }));
+    };
+
+    const onDocumentLoadSuccess = (index, { numPages }) => {
+        setNumPages(prevNumPages => {
+            const newNumPages = [...prevNumPages];
+            newNumPages[index] = numPages;
+            return newNumPages;
+        });
     };
 
     return (
@@ -45,21 +56,30 @@ const Menu = () => {
                             <div className="accordion-content">
                                 <Document
                                     file={item.path}
+                                    onLoadSuccess={(result) => onDocumentLoadSuccess(index, result)}
                                     onLoadError={console.error}
                                     className="pdf-document"
                                 >
-                                    <Page pageNumber={1} width={400} />
+                                    {Array.from(
+                                        new Array(numPages[index]),
+                                        (el, pageIndex) => (
+                                            <Page
+                                                key={`page_${pageIndex + 1}`}
+                                                pageNumber={pageIndex + 1}
+                                                width={400}
+                                            />
+                                        )
+                                    )}
                                 </Document>
                             </div>
                         )}
                     </div>
-
                 ))}
             </div>
             <center>
-            <a href="tel:+441433623093" className="book-table-section">
-                <button>Book a Table</button>
-            </a>
+                <a href="tel:+441433623093" className="book-table-section">
+                    <button>Book a Table</button>
+                </a>
             </center>
         </>
     );
