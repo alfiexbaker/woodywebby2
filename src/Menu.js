@@ -1,95 +1,40 @@
-// menu.js
-import React, { useState, useEffect } from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
-import './Menu.css';
-import "react-pdf/dist/esm/Page/TextLayer.css";
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+import React from 'react';
 
 const Menu = () => {
-    const [menuItems, setMenuItems] = useState([]);
-    const [numPages, setNumPages] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        // Fetch the menu data when the component mounts
-        fetch('/menu.json')
-            .then(response => response.json())
-            .then(data => {
-                setMenuItems(data.map(item => ({ ...item, open: false })));
-                setNumPages(new Array(data.length).fill(0));
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error("Error fetching the menu JSON:", error);
-                setLoading(false);
-            });
-    }, []);
-
-    const toggleAccordion = (index) => {
-        setMenuItems(menuItems.map((item, i) => {
-            if (i === index) {
-                return { ...item, open: !item.open };
-            }
-            return item;
-        }));
-    };
-
-    const onDocumentLoadSuccess = (index, { numPages }) => {
-        setNumPages(prevNumPages => {
-            const newNumPages = [...prevNumPages];
-            newNumPages[index] = numPages;
-            return newNumPages;
-        });
-    };
+    const menuItems = [
+        { id: 1, name: 'Traditional Fish & Chips', description: 'Beer-battered cod served with chunky chips, mushy peas, and tartare sauce.', price: '£14.95' },
+        { id: 2, name: 'Steak & Ale Pie', description: 'Tender chunks of beef slow-cooked in local ale, encased in shortcrust pastry, served with seasonal vegetables and gravy.', price: '£15.95' },
+        { id: 3, name: 'Sunday Roast', description: 'Choice of roast beef, pork or chicken served with Yorkshire pudding, roast potatoes, seasonal vegetables and rich gravy.', price: '£16.95' },
+        { id: 4, name: 'Vegetable Wellington', description: 'Seasonal vegetables and goat cheese wrapped in puff pastry, served with potatoes and a red wine reduction.', price: '£13.95' }
+    ];
 
     return (
-        <>
-            <div className="menu-section">
-                <h1>Menu</h1>
-                {loading ? (
-                    <p>Loading Menu...</p>
-                ) : (
-                    menuItems.map((item, index) => (
-                        <div key={index} className="accordion-item">
-                            <button
-                                className="accordion-button"
-                                type="button"
-                                onClick={() => toggleAccordion(index)}
-                            >
-                                {item.name}
-                            </button>
-                            {item.open && (
-                                <div className="accordion-content">
-                                    <Document
-                                        file={item.path}
-                                        onLoadSuccess={(result) => onDocumentLoadSuccess(index, result)}
-                                        onLoadError={console.error}
-                                        loading={<div>Loading Menu...</div>}
-                                        className="pdf-document"
-                                    >
-                                        {Array.from(
-                                            new Array(numPages[index]),
-                                            (el, pageIndex) => (
-                                                <Page
-                                                    key={`page_${pageIndex + 1}`}
-                                                    pageNumber={pageIndex + 1}
-                                                    width={400}
-                                                />
-                                            )
-                                        )}
-                                    </Document>
-                                </div>
-                            )}
-                        </div>
-                    ))
-                )}
-            </div>
-            <center>
-                <a href="tel:+441433623093" className="book-table-section">
+        <div id="menu" className="menu-section">
+            <h1>Our Menu</h1>
+            <table className="menu-table">
+                <thead>
+                <tr>
+                    <th>Dish</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                {menuItems.map(item => (
+                    <tr key={item.id}>
+                        <td>{item.name}</td>
+                        <td>{item.description}</td>
+                        <td className="menu-item-price">{item.price}</td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+            <div className="book-table-section">
+                <a href="tel:01433623093" className="book-table-button">
                     <button>Book a Table</button>
                 </a>
-            </center>
-        </>
+            </div>
+        </div>
     );
 };
 

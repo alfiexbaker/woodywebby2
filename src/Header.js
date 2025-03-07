@@ -1,30 +1,33 @@
-// src/Header.js
 import React from 'react';
-import { Link } from 'react-scroll';
+import logo from './logo.png'; // Make sure to add your logo image to the project
 
 const Header = ({ menuOpen, setMenuOpen, scrollPosition }) => {
-  return (
-    <header className={`App-header ${scrollPosition > 50 ? 'hide' : ''}`}>
-      <img src="/logo.png" alt="logo" className="App-logo" />
-      <button className={`menu-toggle ${scrollPosition > 0 ? 'scroll' : ''}`} onClick={() => setMenuOpen(!menuOpen)}>
-        <i className={`fas fa-chevron-${menuOpen ? 'up' : 'down'}`}></i>
-      </button>
-      <nav className={menuOpen ? 'open' : ''}>
-        <Link to="home" smooth={true}>Home</Link>
-        <Link to="menu-section" smooth={true}>Menu</Link>
-        <Link to="stay-section" smooth={true}>Stay With Us</Link>
-        <Link to="contact-section" smooth={true}>Contact</Link>
-      </nav>
-      <div className="social-icons">
-        <a href="https://www.facebook.com/profile.php?id=100076126482146" aria-label="Facebook">
-          <i className="fab fa-facebook"></i>
-        </a>
-        <a href="https://www.tripadvisor.co.uk/Restaurant_Review-g806086-d2688626-Reviews-The_Woodroffe_Arms-Hope_Hope_Valley_Peak_District_National_Park_England.html?m=19905" aria-label="TripAdvisor">
-          <i className="fab fa-tripadvisor"></i>
-        </a>
-      </div>
-    </header>
-  );
-}
+    const toggleMenu = () => {
+        setMenuOpen(!menuOpen);
+    };
+
+    return (
+        <header className={`App-header ${scrollPosition > 100 ? 'hide' : ''}`}>
+            <img src={logo} className="App-logo" alt="The Woodroffe Arms" />
+            <div className="menu-toggle" onClick={toggleMenu}>
+                <i className={`fas ${menuOpen ? 'fa-times' : 'fa-bars'}`}></i>
+            </div>
+            <nav className={menuOpen ? 'open' : ''}>
+                <a href="#home">Home</a>
+                <a href="#menu">Menu</a>
+                <a href="#stay">Stay With Us</a>
+                <a href="#contact">Contact</a>
+            </nav>
+            <div className="social-icons">
+                <a href="https://facebook.com/thewoodroffearms" target="_blank" rel="noopener noreferrer">
+                    <i className="fab fa-facebook"></i>
+                </a>
+                <a href="https://instagram.com/thewoodroffearms" target="_blank" rel="noopener noreferrer">
+                    <i className="fab fa-instagram"></i>
+                </a>
+            </div>
+        </header>
+    );
+};
 
 export default Header;

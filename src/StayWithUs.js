@@ -1,45 +1,30 @@
 import React from 'react';
+import roomImage from './room.jpg'; // Add your room image to the project
 
 const StayWithUs = () => {
-  const currentHour = new Date().getHours();
-  const isOpeningHours = currentHour >= 15 && currentHour < 23; // 3pm to 11pm
-  
-  const handleCallClick = () => {
-    if (isOpeningHours) {
-      window.location.href = 'tel:01433623093';
-    } else {
-      window.location.href = 'tel:07921627483';
-    }
-  };
-
   return (
-    <div id="stay-section" className="woodroffe-section">
-      <div className="woodroffe-description">
-        <h1>Stay With Us</h1>
-        <p>
-          Experience the charm of the Peak District with a stay in one of our comfortable en-suite rooms. 
-          Each room is designed with traditional British charm, offering a peaceful retreat after a day 
-          of exploring the stunning landscapes surrounding Hope.
-        </p>
-        <p>
-          Our rooms feature modern amenities while maintaining the warm, inviting atmosphere that The Woodroffe Arms 
-          is known for. Wake up to breathtaking views and join us for a hearty breakfast to start your day right.
-        </p>
-        <div className="book-table-section">
-          <h3>For the best room rates book direct:</h3>
+      <div id="stay" className="woodroffe-section">
+        <div className="woodroffe-description">
+          <h1>Stay With Us</h1>
           <p>
-            <strong>Call:</strong> <a href="tel:01433623093">01433 623093</a> (3pm to 11pm)
-            <br />
-            <strong>Text:</strong> <a href="tel:07921627483">07921 627483</a> (24hrs)
+            Escape to the tranquility of the Peak District with a stay at The Woodroffe Arms. Our charming
+            en-suite rooms offer the perfect blend of traditional character and modern comfort, ensuring a
+            restful night's sleep after a day of exploring the stunning surroundings.
           </p>
-          <button onClick={handleCallClick} className="book-now-button">
-            Book Now - {isOpeningHours ? 'Call Pub' : 'Text Mobile'}
-          </button>
+          <p>
+            Each room is individually designed with attention to detail, featuring premium bedding, modern
+            amenities, and complimentary tea and coffee facilities. Wake up to a delicious full English
+            breakfast prepared with locally-sourced ingredients to fuel your day's adventures.
+          </p>
+          <div className="book-table-section">
+            <a href="tel:01433623093" className="book-table-button">
+              <button>Book a Room</button>
+            </a>
+          </div>
         </div>
+        <img src={roomImage} alt="Room at The Woodroffe Arms" className="woodroffe-image" />
       </div>
-      <img className="woodroffe-image" src="/hotel-room.jpg" alt="The Woodroffe Arms Hotel Room" />
-    </div>
   );
-}
+};
 
 export default StayWithUs;

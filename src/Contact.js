@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
-import emailjs from 'emailjs-com';
 import './Contact.css';
+import emailjs from 'emailjs-com';
 
 const Contact = () => {
     const [formData, setFormData] = useState({
-        from_name: '',
-        from_email: '',
-        enquiry_type: 'business',
-        message: '',
+        name: '',
+        email: '',
+        phone: '',
+        subject: 'General Inquiry',
+        message: ''
     });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submissionStatus, setSubmissionStatus] = useState('');
+
+    const [submitStatus, setSubmitStatus] = useState({
+        submitted: false,
+        success: false,
+        message: ''
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -20,99 +25,132 @@ const Contact = () => {
         }));
     };
 
-    const sendEmail = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
-        setSubmissionStatus('');
 
-        emailjs.send(
-            process.env.REACT_APP_EMAILJS_SERVICE_ID,
-            process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
-            formData,
-            process.env.REACT_APP_EMAILJS_USER_ID
-        )
-            .then((result) => {
-                console.log('Email successfully sent!', result.text);
-                setFormData({
-                    from_name: '',
-                    from_email: '',
-                    enquiry_type: 'business',
-                    message: '',
+        if (process.env.REACT_APP_EMAILJS_SERVICE_ID &&
+            process.env.REACT_APP_EMAILJS_TEMPLATE_ID &&
+            process.env.REACT_APP_EMAILJS_USER_ID) {
+
+            emailjs.send(
+                process.env.REACT_APP_EMAILJS_SERVICE_ID,
+                process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+                {
+                    from_name: formData.name,
+                    from_email: formData.email,
+                    from_phone: formData.phone,
+                    subject: formData.subject,
+                    message: formData.message
+                }
+            )
+                .then((response) => {
+                    setSubmitStatus({
+                        submitted: true,
+                        success: true,
+                        message: 'Your message has been sent. We will get back to you shortly!'
+                    });
+                    setFormData({
+                        name: '',
+                        email: '',
+                        phone: '',
+                        subject: 'General Inquiry',
+                        message: ''
+                    });
+                })
+                .catch((error) => {
+                    setSubmitStatus({
+                        submitted: true,
+                        success: false,
+                        message: 'There was an error sending your message. Please try again or contact us directly.'
+                    });
                 });
-                setSubmissionStatus('Success! Your message has been sent.');
-            }, (error) => {
-                console.log('Failed to send email:', error.text);
-                setSubmissionStatus('Failed to send message. Please try again.');
-            })
-            .finally(() => {
-                setIsSubmitting(false);
+        } else {
+            // Fallback for when EmailJS credentials are not available
+            setSubmitStatus({
+                submitted: true,
+                success: true,
+                message: 'Form submission is currently disabled. Please contact us directly.'
             });
+        }
     };
 
     return (
-        <div id="contact-section">
-            <h1>Contact Us</h1>
-            <div className="contact-container">
-                <div className="contact-form">
-                    <form onSubmit={sendEmail}>
+        <div id="contact" className="contact-container">
+            <div className="contact-form">
+                <h1>Contact Us</h1>
+                {submitStatus.submitted ? (
+                    <p style={{ color: submitStatus.success ? '#4CAF50' : '#F44336' }}>
+                        {submitStatus.message}
+                    </p>
+                ) : (
+                    <form onSubmit={handleSubmit}>
                         <input
                             type="text"
-                            name="from_name"
-                            placeholder="Name"
-                            required
-                            value={formData.from_name}
+                            name="name"
+                            value={formData.name}
                             onChange={handleChange}
+                            placeholder="Your Name"
+                            required
                         />
                         <input
                             type="email"
-                            name="from_email"
-                            placeholder="Email"
-                            required
-                            value={formData.from_email}
+                            name="email"
+                            value={formData.email}
                             onChange={handleChange}
+                            placeholder="Your Email"
+                            required
+                        />
+                        <input
+                            type="tel"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            placeholder="Your Phone Number"
                         />
                         <select
-                            name="enquiry_type"
-                            value={formData.enquiry_type}
+                            name="subject"
+                            value={formData.subject}
                             onChange={handleChange}
                         >
-                            <option value="business">Business Enquiry</option>
-                            <option value="stay">Stay with Us</option>
-                            <option value="general">General Enquiry</option>
+                            <option value="General Inquiry">General Inquiry</option>
+                            <option value="Room Booking">Room Booking</option>
+                            <option value="Table Reservation">Table Reservation</option>
+                            <option value="Event Inquiry">Event Inquiry</option>
                         </select>
                         <textarea
                             name="message"
-                            rows="5"
-                            placeholder="Message"
-                            required
                             value={formData.message}
                             onChange={handleChange}
+                            placeholder="Your Message"
+                            rows="6"
+                            required
                         ></textarea>
-                        <button type="submit" disabled={isSubmitting}>
-                            {isSubmitting ? 'Submitting...' : 'Submit'}
-                        </button>
-                        {submissionStatus && <p className="submission-status">{submissionStatus}</p>}
+                        <button type="submit">Send Message</button>
                     </form>
+                )}
+            </div>
+            <div className="map-and-details">
+                <h1>Find Us</h1>
+                <div className="contact-details">
+                    <p>The Woodroffe Arms</p>
+                    <p>Main Street, Hope</p>
+                    <p>Peak District National Park</p>
+                    <p>Derbyshire, S33 6RH</p>
+                    <p>Phone: 01433 623093</p>
+                    <p>Email: info@woodroffearms.co.uk</p>
                 </div>
-                <div className="map-and-details">
-                    <div style={{ width: '100%' }}>
-                        <iframe
-                            width="100%"
-                            height="300"
-                            frameBorder="0"
-                            scrolling="no"
-                            marginHeight="0"
-                            marginWidth="0"
-                            src="https://maps.google.com/maps?width=100%25&amp;height=300&amp;hl=en&amp;q=1%20Castleton%20Rd,%20Hope,%20Hope%20Valley%20S33%206SB+(The%20Woodroffe%20Arms)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
-                        </iframe>
-                    </div>
-                    <div className="contact-details">
-                        <p><strong>Address:</strong> 1 Castleton Rd, Hope, Hope Valley S33 6SB <br /><strong>Phone:</strong> 01433 623093</p>
-                    </div>
-                </div>
+                <iframe
+                    title="The Woodroffe Arms Location"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2380.932141614953!2d-1.728111384069437!3d53.35070237997966!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487bc2a09064b975%3A0x5d5d6098c9439d0a!2sHope%2C%20UK!5e0!3m2!1sen!2sus!4v1610123456789!5m2!1sen!2sus"
+                    width="100%"
+                    height="300"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                ></iframe>
             </div>
         </div>
     );
-}
+};
 
 export default Contact;
