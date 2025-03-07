@@ -6,6 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="7331fb58-c810-495c-8cf2-cef52463345d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Contact.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Contact.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DineWithUs.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/DineWithUs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Menu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/OurPub.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/OurPub.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/StayWithUs.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/StayWithUs.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +58,7 @@
       <workItem from="1720491009362" duration="40000" />
       <workItem from="1720581569978" duration="599000" />
       <workItem from="1741374765158" duration="129000" />
-      <workItem from="1741375860767" duration="690000" />
+      <workItem from="1741375860767" duration="469000" />
     </task>
     <servers />
   </component>
